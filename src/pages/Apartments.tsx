@@ -189,12 +189,12 @@ export default function Apartments() {
               {/* Price Range Filter */}
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  {t.apartments.filters.priceRange}: ${priceRange[0]} - ${priceRange[1]}
+                  {t.apartments.filters.priceRange}: {priceRange[0]} JD - {priceRange[1]} JD
                 </label>
                 <Slider
-                  defaultValue={[100, 350]}
-                  min={100}
-                  max={350}
+                  defaultValue={[50, 200]}
+                  min={50}
+                  max={250}
                   step={10}
                   value={priceRange}
                   onValueChange={setPriceRange}

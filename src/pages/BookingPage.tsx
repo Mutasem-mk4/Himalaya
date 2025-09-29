@@ -368,7 +368,7 @@ export default function BookingPage() {
                         </div>
                         <div className="flex items-center justify-between mt-4">
                           <div>
-                            <span className="text-xl font-bold">${apartment.price}</span>
+                            <span className="text-xl font-bold">{apartment.price} JD</span>
                             <span className="text-muted-foreground text-sm"> / night</span>
                           </div>
                           <Button 
@@ -615,24 +615,24 @@ export default function BookingPage() {
                           <div className="py-4 border-b space-y-2">
                             <div className="flex justify-between items-center">
                               <span>
-                                ${selectedApartment.price} x {nightsCount} {nightsCount === 1 ? "night" : "nights"}
+                                {selectedApartment.price} JD x {nightsCount} {nightsCount === 1 ? "night" : "nights"}
                               </span>
-                              <span className="font-medium">${selectedApartment.price * nightsCount}</span>
+                              <span className="font-medium">{selectedApartment.price * nightsCount} JD</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span>Cleaning fee</span>
-                              <span className="font-medium">$50</span>
+                              <span className="font-medium">25 JD</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span>Service fee</span>
-                              <span className="font-medium">$30</span>
+                              <span className="font-medium">15 JD</span>
                             </div>
                           </div>
                           
                           <div className="pt-4">
                             <div className="flex justify-between items-center font-bold">
                               <span>Total</span>
-                              <span>${totalPrice + 50 + 30}</span>
+                              <span>{totalPrice + 25 + 15} JD</span>
                             </div>
                           </div>
                         </>
@@ -774,21 +774,21 @@ export default function BookingPage() {
                           <>
                             <div className="flex justify-between items-center">
                               <span>
-                                ${selectedApartment.price} x {nightsCount} {nightsCount === 1 ? "night" : "nights"}
+                                {selectedApartment.price} JD x {nightsCount} {nightsCount === 1 ? "night" : "nights"}
                               </span>
-                              <span className="font-medium">${selectedApartment.price * nightsCount}</span>
+                              <span className="font-medium">{selectedApartment.price * nightsCount} JD</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span>Cleaning fee</span>
-                              <span className="font-medium">$50</span>
+                              <span className="font-medium">25 JD</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span>Service fee</span>
-                              <span className="font-medium">$30</span>
+                              <span className="font-medium">15 JD</span>
                             </div>
                             <div className="flex justify-between items-center pt-4 border-t mt-4">
                               <span className="font-semibold">Total</span>
-                              <span className="font-bold text-xl">${totalPrice + 50 + 30}</span>
+                              <span className="font-bold text-xl">{totalPrice + 25 + 15} JD</span>
                             </div>
                           </>
                         )}

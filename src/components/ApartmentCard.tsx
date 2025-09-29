@@ -92,7 +92,7 @@ export default function ApartmentCard({ apartment }: { apartment: ApartmentProps
         
         <div className="flex items-end justify-between pt-2">
           <div>
-            <span className="text-xl font-bold">${apartment.price}</span>
+            <span className="text-xl font-bold">{apartment.price} JD</span>
             <span className="text-muted-foreground text-sm"> / {t.booking.summary.night}</span>
           </div>
           <Button asChild className="btn-primary">

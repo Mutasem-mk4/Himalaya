@@ -56,6 +56,9 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden md:flex items-center space-x-2">
+          <Button asChild variant="outline" size="sm">
+            <Link to="/auth">Owner Login</Link>
+          </Button>
           <ThemeToggle />
           <Button asChild className="btn-primary">
             <Link to="/booking">{t.nav.bookNow}</Link>
@@ -88,6 +91,11 @@ export default function Navbar() {
                       {link.name}
                     </Link>
                   </li>)}
+                <li>
+                  <Link to="/auth" className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
+                    Owner Login
+                  </Link>
+                </li>
               </ul>
             </div>
             
