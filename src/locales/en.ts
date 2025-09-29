@@ -1,22 +1,22 @@
 export const en = {
   nav: {
     home: "Home",
-    apartments: "Apartments",
+    apartments: "Chalets",
     amenities: "Amenities",
     gallery: "Gallery",
     contact: "Contact",
     bookNow: "Book Now"
   },
   hero: {
-    subtitle: "BEACHFRONT LUXURY ACCOMMODATION",
-    title: "Experience Seaside Tranquility",
-    description: "Discover our exclusive collection of luxury beachfront apartments and hotel rooms, offering unparalleled comfort and breathtaking sea views.",
+    subtitle: "LUXURY DESERT CHALET RENTALS",
+    title: "Experience Jordanian Tranquility",
+    description: "Discover our exclusive collection of luxury desert chalets nestled in Jordan's breathtaking landscapes, offering unparalleled comfort and stunning desert views.",
     bookStay: "Book Your Stay",
-    exploreApartments: "Explore Apartments",
+    exploreApartments: "Explore Chalets",
     scrollDown: "Scroll Down"
   },
   footer: {
-    description: "Luxurious beachfront apartments and hotel rooms with stunning sea views, offering the perfect blend of comfort and elegance for your dream vacation.",
+    description: "Luxurious desert chalets in Jordan's most spectacular landscapes, offering the perfect blend of comfort and authenticity for your dream desert retreat.",
     quickLinks: "Quick Links",
     contact: "Contact",
     newsletter: "Newsletter",
@@ -39,7 +39,7 @@ export const en = {
   },
   testimonials: {
     title: "What Our Guests Say",
-    description: "Discover why our guests keep coming back to MareSereno for their seaside getaways."
+    description: "Discover why our guests keep coming back to Himalaya for their desert getaways."
   },
   notFound: {
     title: "Page Not Found",
@@ -48,10 +48,10 @@ export const en = {
   },
   home: {
     welcome: {
-      subtitle: "Welcome to MareSereno",
-      title: "Luxury Seaside Accommodations",
-      description1: "Nestled on the pristine Mediterranean coastline, MareSereno offers an exquisite collection of luxury apartments and hotel rooms. Our beachfront accommodations combine elegant design with modern comfort, creating the perfect setting for an unforgettable seaside getaway.",
-      description2: "Whether you're seeking a romantic escape, a family vacation, or a peaceful retreat, our diverse range of accommodations caters to every preference and need. Each space is thoughtfully designed to provide panoramic sea views and direct beach access.",
+      subtitle: "Welcome to Himalaya",
+      title: "Luxury Desert Chalets",
+      description1: "Nestled in Jordan's spectacular desert landscapes, Himalaya offers an exquisite collection of luxury chalets and desert accommodations. Our properties combine traditional Jordanian architecture with modern comfort, creating the perfect setting for an unforgettable desert adventure.",
+      description2: "Whether you're seeking a romantic escape, a family adventure, or a peaceful retreat, our diverse range of chalets caters to every preference and need. Each space is thoughtfully designed to provide panoramic desert views and authentic Jordanian hospitality.",
       learnMore: "Learn More"
     },
     booking: {
@@ -61,45 +61,45 @@ export const en = {
       benefits: ["Instant confirmation", "Best rate guarantee", "Flexible cancellation options", "Secure payment"]
     },
     featuredApartments: {
-      subtitle: "Our Accommodations",
-      title: "Featured Apartments",
-      description: "Discover our most popular accommodation options, each offering a perfect blend of comfort, style, and breathtaking sea views.",
-      viewAll: "View All Apartments"
+      subtitle: "Our Chalets",
+      title: "Featured Desert Chalets",
+      description: "Discover our most popular chalet options, each offering a perfect blend of comfort, style, and breathtaking desert views.",
+      viewAll: "View All Chalets"
     },
     amenities: {
-      subtitle: "Hotel Amenities",
-      title: "Experience The Best",
-      description: "Enjoy our premium facilities and services designed to make your stay exceptional.",
+      subtitle: "Chalet Amenities",
+      title: "Experience The Desert",
+      description: "Enjoy our premium facilities and services designed to make your desert stay exceptional.",
       features: {
         beachfront: {
-          title: "Beachfront Location",
-          description: "Direct access to pristine beaches with crystal clear waters."
+          title: "Desert Views",
+          description: "Panoramic views of Jordan's stunning desert landscapes and rock formations."
         },
         pools: {
-          title: "Swimming Pools",
-          description: "Relax by our infinity pools with stunning sea views."
+          title: "Desert Pools",
+          description: "Relax by our infinity pools with breathtaking desert vistas."
         },
         restaurant: {
-          title: "Gourmet Restaurant",
-          description: "Enjoy exquisite local and international cuisine."
+          title: "Jordanian Cuisine",
+          description: "Savor authentic Jordanian dishes and international cuisine."
         },
         wifi: {
           title: "High-Speed Wi-Fi",
           description: "Stay connected with complimentary high-speed internet."
         },
         bar: {
-          title: "Beach Bar & Café",
-          description: "Refreshing drinks and snacks served right on the beach."
+          title: "Desert Lounge",
+          description: "Refreshing drinks and traditional Jordanian hospitality under the stars."
         },
         location: {
           title: "Prime Location",
-          description: "Close to local attractions, shops, and restaurants."
+          description: "Close to Petra, Wadi Rum, and other Jordan attractions."
         }
       }
     },
     cta: {
-      title: "Ready for Your Dream Vacation?",
-      description: "Book your stay today and experience the perfect blend of luxury, comfort, and stunning sea views.",
+      title: "Ready for Your Desert Adventure?",
+      description: "Book your stay today and experience the perfect blend of luxury, comfort, and stunning desert landscapes.",
       bookNow: "Book Now"
     }
   },

@@ -10,39 +10,39 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Wifi, Utensils, Waves, LifeBuoy, MapPin, Coffee } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Sample apartments data
+// Sample chalets data
 const featuredApartments: ApartmentProps[] = [
   {
     id: "1",
-    name: "Deluxe Sea View Suite",
-    description: "Luxurious suite with panoramic sea views, modern amenities, and a private balcony.",
+    name: "Desert Vista Chalet",
+    description: "Luxurious chalet with panoramic desert views, modern amenities, and a private terrace.",
     price: 180,
     capacity: 2,
     size: 45,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop",
-    location: "Beachfront",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Balcony"]
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+    location: "Wadi Rum",
+    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Terrace"]
   },
   {
     id: "2",
-    name: "Premium Family Apartment",
-    description: "Spacious apartment ideal for families, with full kitchen and stunning coastal views.",
+    name: "Family Desert Lodge",
+    description: "Spacious chalet ideal for families, with full kitchen and stunning valley views.",
     price: 250,
     capacity: 4,
     size: 75,
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
-    location: "Second row",
+    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
+    location: "Dana Reserve",
     features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Washing Machine"]
   },
   {
     id: "3",
-    name: "Executive Beach Studio",
-    description: "Elegant studio with direct beach access, modern design, and premium finishes.",
+    name: "Executive Desert Studio",
+    description: "Elegant studio with direct desert access, modern design, and premium finishes.",
     price: 150,
     capacity: 2,
     size: 35,
-    image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800&h=600&fit=crop",
-    location: "Beachfront",
+    image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73673?w=800&h=600&fit=crop",
+    location: "Eastern Desert",
     features: ["Wi-Fi", "Kitchenette", "Bathroom", "Air Conditioning", "TV"]
   }
 ];
@@ -124,22 +124,22 @@ export default function Index() {
               <div className="relative animate-fade-in [animation-delay:300ms]">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&h=600&fit=crop"
-                    alt="Seaside view" 
+                    src="https://images.unsplash.com/photo-1539650116574-75c0c6d73673?w=800&h=600&fit=crop"
+                    alt="Jordan desert landscape" 
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="absolute -bottom-6 -left-6 w-2/3 rounded-2xl overflow-hidden shadow-xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1545579133-99bb5ab189bd?w=400&h=300&fit=crop"
-                    alt="Luxury apartment interior" 
+                    src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"
+                    alt="Luxury desert chalet interior" 
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="absolute -top-6 -right-6 w-1/2 rounded-2xl overflow-hidden shadow-xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&h=300&fit=crop"
-                    alt="Pool view" 
+                    src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"
+                    alt="Desert pool view" 
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -149,7 +149,7 @@ export default function Index() {
         </section>
         
         {/* Booking Form Section */}
-        <section className="relative py-20 bg-gradient-to-r from-sea-light to-white dark:from-sea-dark dark:to-background overflow-hidden">
+        <section className="relative py-20 bg-gradient-to-r from-desert-light to-white dark:from-desert-dark dark:to-background overflow-hidden">
           <div className="container relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="animate-fade-in">
@@ -181,7 +181,7 @@ export default function Index() {
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-1/3 h-full opacity-10">
             <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-primary/50 blur-3xl" />
-            <div className="absolute bottom-10 right-40 w-48 h-48 rounded-full bg-sea-light blur-3xl" />
+            <div className="absolute bottom-10 right-40 w-48 h-48 rounded-full bg-desert-light blur-3xl" />
           </div>
         </section>
         
