@@ -24,7 +24,16 @@ export default function Auth() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user && !authLoading && userRole) {
+    console.log('Auth redirect check:', { user: !!user, authLoading, userRole });
+    
+    if (user && !authLoading) {
+      // Wait a bit for role to load if it's not set yet
+      if (!userRole) {
+        console.log('Waiting for user role to load...');
+        return;
+      }
+      
+      console.log('Redirecting user with role:', userRole);
       // Redirect based on user role
       if (userRole === 'admin') {
         navigate("/admin");

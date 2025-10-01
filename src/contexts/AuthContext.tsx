@@ -48,16 +48,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchAndSetRole = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .order('role', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching user role:', error);
+      }
+
+      const role = data?.role || 'user';
+      console.log('User role loaded:', role);
+      setUserRole(role);
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+      setUserRole('user');
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, 'User ID:', session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          // Defer the database call with setTimeout
           setTimeout(() => {
-            refreshUserRole();
+            fetchAndSetRole(session.user.id);
           }, 0);
         } else {
           setUserRole(null);
@@ -73,8 +98,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        // Fetch role immediately for initial load
         setTimeout(() => {
-          refreshUserRole();
+          fetchAndSetRole(session.user.id);
         }, 0);
       }
       
