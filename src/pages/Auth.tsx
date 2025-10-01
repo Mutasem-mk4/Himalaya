@@ -19,15 +19,22 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   
-  const { signIn, signUp, user, loading: authLoading } = useAuth();
+  const { signIn, signUp, user, userRole, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user && !authLoading) {
-      navigate("/");
+    if (user && !authLoading && userRole) {
+      // Redirect based on user role
+      if (userRole === 'admin') {
+        navigate("/admin");
+      } else if (userRole === 'chalet_owner') {
+        navigate("/owner");
+      } else {
+        navigate("/");
+      }
     }
-  }, [user, authLoading, navigate]);
+  }, [user, userRole, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
