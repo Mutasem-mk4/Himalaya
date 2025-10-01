@@ -1,18 +1,39 @@
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSelector from "./LanguageSelector";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import himalayanLogo from "@/assets/himalaya-logo.jpg";
 
 export default function Navbar() {
   const { t } = useLanguage();
+  const { user, userRole, signOut } = useAuth();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const getDashboardLink = () => {
+    if (userRole === 'admin') return '/admin';
+    if (userRole === 'chalet_owner') return '/owner';
+    return '/';
+  };
   
   const navLinks = [
     { name: t.nav.home, path: "/" },
@@ -56,9 +77,34 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden md:flex items-center space-x-2">
-          <Button asChild variant="outline" size="sm">
-            <Link to="/auth">Owner Login</Link>
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to={getDashboardLink()}>
+                    {userRole === 'admin' ? 'Admin Dashboard' : 
+                     userRole === 'chalet_owner' ? 'Owner Dashboard' : 
+                     'My Account'}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button asChild variant="outline" size="sm">
+              <Link to="/auth">Owner Login</Link>
+            </Button>
+          )}
           <ThemeToggle />
           <Button asChild className="btn-primary">
             <Link to="/booking">{t.nav.bookNow}</Link>
@@ -91,11 +137,35 @@ export default function Navbar() {
                       {link.name}
                     </Link>
                   </li>)}
-                <li>
-                  <Link to="/auth" className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
-                    Owner Login
-                  </Link>
-                </li>
+                {user ? (
+                  <>
+                    <li>
+                      <Link to={getDashboardLink()} className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
+                        {userRole === 'admin' ? 'Admin Dashboard' : 
+                         userRole === 'chalet_owner' ? 'Owner Dashboard' : 
+                         'My Account'}
+                      </Link>
+                    </li>
+                    <li>
+                      <button 
+                        onClick={() => {
+                          handleSignOut();
+                          setMobileMenuOpen(false);
+                        }} 
+                        className="text-lg font-medium transition-colors hover:text-primary flex items-center"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <li>
+                    <Link to="/auth" className="text-lg font-medium transition-colors hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
+                      Owner Login
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             
