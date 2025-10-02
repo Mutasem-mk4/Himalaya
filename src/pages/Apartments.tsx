@@ -13,88 +13,66 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-// Sample apartments data (will use translations from context)
-const allApartments: ApartmentProps[] = [
-  {
-    id: "1",
-    name: "Deluxe Sea View Suite",
-    description: "Luxurious suite with panoramic sea views, modern amenities, and a private balcony.",
-    price: 180,
-    capacity: 2,
-    size: 45,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop",
-    location: "Beachfront",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Balcony"]
-  },
-  {
-    id: "2",
-    name: "Premium Family Apartment",
-    description: "Spacious apartment ideal for families, with full kitchen and stunning coastal views.",
-    price: 250,
-    capacity: 4,
-    size: 75,
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
-    location: "Second row",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Washing Machine"]
-  },
-  {
-    id: "3",
-    name: "Executive Beach Studio",
-    description: "Elegant studio with direct beach access, modern design, and premium finishes.",
-    price: 150,
-    capacity: 2,
-    size: 35,
-    image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800&h=600&fit=crop",
-    location: "Beachfront",
-    features: ["Wi-Fi", "Kitchenette", "Bathroom", "Air Conditioning", "TV"]
-  },
-  {
-    id: "4",
-    name: "Luxury Penthouse Suite",
-    description: "Exclusive top-floor suite with expansive terrace and panoramic sea views.",
-    price: 350,
-    capacity: 4,
-    size: 90,
-    image: "https://images.unsplash.com/photo-1562438668-bcf0ca6578f0?w=800&h=600&fit=crop",
-    location: "Beachfront",
-    features: ["Wi-Fi", "Full Kitchen", "2 Bathrooms", "Air Conditioning", "TV", "Terrace", "Jacuzzi"]
-  },
-  {
-    id: "5",
-    name: "Classic Double Room",
-    description: "Comfortable hotel room with modern amenities and partial sea views.",
-    price: 120,
-    capacity: 2,
-    size: 28,
-    image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
-    location: "Hotel building",
-    features: ["Wi-Fi", "Bathroom", "Air Conditioning", "TV", "Mini Fridge"]
-  },
-  {
-    id: "6",
-    name: "Garden View Apartment",
-    description: "Peaceful apartment surrounded by lush gardens, just a short walk from the beach.",
-    price: 160,
-    capacity: 3,
-    size: 55,
-    image: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800&h=600&fit=crop",
-    location: "Garden area",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Terrace"]
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Apartments() {
   const { t } = useLanguage();
-  const [filteredApartments, setFilteredApartments] = useState<ApartmentProps[]>(allApartments);
+  const { toast } = useToast();
+  const [allApartments, setAllApartments] = useState<ApartmentProps[]>([]);
+  const [filteredApartments, setFilteredApartments] = useState<ApartmentProps[]>([]);
   const [capacityFilter, setCapacityFilter] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState<string>("all");
-  const [priceRange, setPriceRange] = useState<number[]>([100, 350]);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+  const [loading, setLoading] = useState(true);
   
+  // Fetch chalets from Supabase
   useEffect(() => {
-    // Scroll to top when component mounts
+    const fetchChalets = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('chalets')
+          .select('*')
+          .eq('status', 'active');
+        
+        if (error) throw error;
+        
+        // Map chalets to ApartmentProps format
+        const apartments: ApartmentProps[] = (data || []).map(chalet => ({
+          id: chalet.id,
+          name: chalet.title,
+          description: chalet.description || '',
+          price: Number(chalet.price_per_night),
+          capacity: chalet.max_guests,
+          size: chalet.bedrooms * 20, // Estimate size from bedrooms
+          image: chalet.images?.[0] || 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop',
+          location: chalet.location,
+          features: chalet.amenities || []
+        }));
+        
+        setAllApartments(apartments);
+        setFilteredApartments(apartments);
+        
+        // Set initial price range based on actual data
+        if (apartments.length > 0) {
+          const prices = apartments.map(apt => apt.price);
+          setPriceRange([Math.min(...prices), Math.max(...prices)]);
+        }
+      } catch (error) {
+        console.error('Error fetching chalets:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load chalets. Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchChalets();
     window.scrollTo(0, 0);
-  }, []);
+  }, [toast]);
   
   // Apply filters
   useEffect(() => {
@@ -115,7 +93,7 @@ export default function Apartments() {
     result = result.filter(apt => apt.price >= priceRange[0] && apt.price <= priceRange[1]);
     
     setFilteredApartments(result);
-  }, [capacityFilter, locationFilter, priceRange]);
+  }, [capacityFilter, locationFilter, priceRange, allApartments]);
   
   // Get unique locations for filter
   const locations = ["all", ...new Set(allApartments.map(apt => apt.location))];
@@ -192,9 +170,8 @@ export default function Apartments() {
                   {t.apartments.filters.priceRange}: {priceRange[0]} JD - {priceRange[1]} JD
                 </label>
                 <Slider
-                  defaultValue={[50, 200]}
-                  min={50}
-                  max={250}
+                  min={0}
+                  max={Math.max(...allApartments.map(a => a.price), 1000)}
                   step={10}
                   value={priceRange}
                   onValueChange={setPriceRange}
@@ -212,7 +189,10 @@ export default function Apartments() {
                 onClick={() => {
                   setCapacityFilter("all");
                   setLocationFilter("all");
-                  setPriceRange([100, 350]);
+                  if (allApartments.length > 0) {
+                    const prices = allApartments.map(apt => apt.price);
+                    setPriceRange([Math.min(...prices), Math.max(...prices)]);
+                  }
                 }}
               >
                 {t.apartments.filters.resetFilters}
@@ -224,13 +204,22 @@ export default function Apartments() {
         {/* Apartments Grid */}
         <section className="section">
           <div className="container">
-            {filteredApartments.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Loading chalets...</p>
+              </div>
+            ) : filteredApartments.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredApartments.map((apartment, index) => (
                   <div key={apartment.id} className="animate-fade-in" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
                     <ApartmentCard apartment={apartment} />
                   </div>
                 ))}
+              </div>
+            ) : allApartments.length === 0 ? (
+              <div className="text-center py-12 animate-fade-in">
+                <h3 className="text-xl font-semibold mb-2">No Chalets Available</h3>
+                <p className="text-muted-foreground">Check back soon for new listings.</p>
               </div>
             ) : (
               <div className="text-center py-12 animate-fade-in">
@@ -241,7 +230,10 @@ export default function Apartments() {
                   onClick={() => {
                     setCapacityFilter("all");
                     setLocationFilter("all");
-                    setPriceRange([100, 350]);
+                    if (allApartments.length > 0) {
+                      const prices = allApartments.map(apt => apt.price);
+                      setPriceRange([Math.min(...prices), Math.max(...prices)]);
+                    }
                   }}
                 >
                   {t.apartments.filters.resetFilters}
