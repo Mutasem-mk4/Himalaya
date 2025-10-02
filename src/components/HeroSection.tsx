@@ -27,17 +27,22 @@ export default function HeroSection() {
   return (
     <section className="relative h-screen overflow-hidden">
       {/* Background image with parallax */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${jordanChaletHero})`,
-          transform: `translateY(${backgroundY}px)`,
-          backgroundPosition: `center ${50 + scrollY * 0.05}%`
-        }}
-      />
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          src={jordanChaletHero}
+          alt="Luxury chalet hero image with ocean teal tones"
+          className="absolute inset-0 h-full w-full object-cover will-change-transform"
+          style={{ transform: `translateY(${backgroundY}px)`, objectPosition: `center ${50 + scrollY * 0.05}%` }}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+        />
+      </div>
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
+      {/* Teal brand gradient overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.55)] via-[hsl(var(--primary)/0.25)] to-black/60 dark:from-[hsl(var(--primary)/0.4)] dark:via-[hsl(var(--primary)/0.2)] dark:to-black/70 mix-blend-multiply dark:mix-blend-normal"
+      />
       
       {/* Content */}
       <div
