@@ -136,7 +136,7 @@ export default function OwnerDashboard() {
         amenities: formData.amenities,
         images: formData.images,
         owner_id: user?.id,
-        status: 'pending' as const
+        status: 'active' as const
       };
 
       if (editingChalet) {
@@ -160,7 +160,7 @@ export default function OwnerDashboard() {
 
         toast({
           title: "Success",
-          description: "Chalet added successfully and is pending approval",
+          description: "Chalet added successfully and is now live!",
         });
       }
 
