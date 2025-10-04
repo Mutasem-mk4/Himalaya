@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { en } from '../locales/en';
-import { it } from '../locales/it';
+import { ar } from '../locales/ar';
 
 type Translations = typeof en;
 
@@ -13,7 +13,7 @@ interface LanguageContextType {
 
 const translations: Record<string, Translations> = {
   en,
-  it
+  ar
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -27,6 +27,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     if (savedLanguage && translations[savedLanguage]) {
       setLanguage(savedLanguage);
       setT(translations[savedLanguage]);
+      // Set text direction based on language
+      document.documentElement.dir = savedLanguage === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = savedLanguage;
     }
   }, []);
 
@@ -35,6 +38,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       setLanguage(lang);
       setT(translations[lang]);
       localStorage.setItem('language', lang);
+      // Set text direction based on language
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = lang;
     }
   };
 
