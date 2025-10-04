@@ -54,19 +54,19 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				sea: {
-					light: '#D2B48C',
-					DEFAULT: '#C8860D',
-					dark: '#8B4513'
+					light: '#7AB8CC',
+					DEFAULT: '#4A90A4',
+					dark: '#2B5F75'
 				},
 				sand: {
-					light: '#F5DEB3',
-					DEFAULT: '#DEB887',
-					dark: '#D2B48C'
+					light: '#F5E6D3',
+					DEFAULT: '#E8D4B8',
+					dark: '#C9B196'
 				},
 				desert: {
-					light: '#F4A460',
-					DEFAULT: '#CD853F',
-					dark: '#A0522D'
+					light: '#D4A373',
+					DEFAULT: '#B08968',
+					dark: '#8B6F47'
 				},
 				stone: {
 					light: '#E6DDD4',

@@ -56,7 +56,7 @@ export default function Navbar() {
   
   return <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-white/80 dark:bg-card/80 backdrop-blur-lg py-3 shadow-md" : "bg-transparent py-5")}>
       <nav className="container flex justify-between items-center">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center">
             <img 
               src={himalayanLogo} 
@@ -68,7 +68,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex space-x-8">
+        <ul className="hidden md:flex gap-8">
           {navLinks.map(link => <li key={link.name} className="relative">
               <Link to={link.path} className="font-medium transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full">
                 {link.name}
@@ -76,7 +76,7 @@ export default function Navbar() {
             </li>)}
         </ul>
 
-        <div className="hidden md:flex items-center space-x-2">
+        <div className="hidden md:flex items-center gap-2">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -85,7 +85,7 @@ export default function Navbar() {
                   Account
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-card">
                 <DropdownMenuItem asChild>
                   <Link to={getDashboardLink()}>
                     {userRole === 'admin' ? 'Admin Dashboard' : 
@@ -95,7 +95,7 @@ export default function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
+                  <LogOut className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -112,7 +112,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center space-x-2">
+        <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="rounded-full">
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -122,7 +122,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div className={cn("fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden transition-opacity duration-300", mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none")}>
-        <div className={cn("fixed inset-y-0 right-0 w-3/4 max-w-sm bg-card shadow-xl p-6 transition-transform duration-300 ease-in-out", mobileMenuOpen ? "translate-x-0" : "translate-x-full")}>
+        <div className={cn("fixed inset-y-0 ltr:right-0 rtl:left-0 w-3/4 max-w-sm bg-card shadow-xl p-6 transition-transform duration-300 ease-in-out", mobileMenuOpen ? "translate-x-0" : "ltr:translate-x-full rtl:-translate-x-full")}>
           <div className="flex flex-col h-full justify-between">
             <div>
               <div className="flex justify-between mb-8">
@@ -154,7 +154,7 @@ export default function Navbar() {
                         }} 
                         className="text-lg font-medium transition-colors hover:text-primary flex items-center"
                       >
-                        <LogOut className="h-4 w-4 mr-2" />
+                        <LogOut className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
                         Sign Out
                       </button>
                     </li>

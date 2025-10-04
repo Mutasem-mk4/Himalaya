@@ -50,17 +50,17 @@ export default function ApartmentCard({ apartment }: { apartment: ApartmentProps
           <div>
             <h3 className="text-white text-xl font-bold mb-1">{translatedName}</h3>
             <div className="flex items-center text-white/80 text-sm mb-2">
-              <MapPin className="h-4 w-4 mr-1" />
+              <MapPin className="h-4 w-4 ltr:mr-1 rtl:ml-1" />
               <span>{apartment.location}</span>
             </div>
-            <div className="flex items-center space-x-3 text-white">
+            <div className="flex items-center gap-3 text-white">
               <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
+                <Users className="h-4 w-4 ltr:mr-1 rtl:ml-1" />
                 <span>{apartment.capacity} {apartment.capacity === 1 ? 
                   t.apartments.filters.guests : t.apartments.filters.guests}</span>
               </div>
               <div className="flex items-center">
-                <Maximize className="h-4 w-4 mr-1" />
+                <Maximize className="h-4 w-4 ltr:mr-1 rtl:ml-1" />
                 <span>{apartment.size} m²</span>
               </div>
             </div>
@@ -77,9 +77,9 @@ export default function ApartmentCard({ apartment }: { apartment: ApartmentProps
               key={index} 
               className="flex items-center text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full"
             >
-              {feature === "Bathroom" && <Bath className="h-3.5 w-3.5 mr-1" />}
-              {feature === "Kitchen" && <Coffee className="h-3.5 w-3.5 mr-1" />}
-              {feature === "Wi-Fi" && <Wifi className="h-3.5 w-3.5 mr-1" />}
+              {feature === "Bathroom" && <Bath className="h-3.5 w-3.5 ltr:mr-1 rtl:ml-1" />}
+              {feature === "Kitchen" && <Coffee className="h-3.5 w-3.5 ltr:mr-1 rtl:ml-1" />}
+              {feature === "Wi-Fi" && <Wifi className="h-3.5 w-3.5 ltr:mr-1 rtl:ml-1" />}
               <span>{feature}</span>
             </div>
           ))}

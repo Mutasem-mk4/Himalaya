@@ -16,7 +16,7 @@ export default function Footer() {
             <p className="text-muted-foreground mb-4">
               {t.footer.description}
             </p>
-            <div className="flex space-x-4">
+            <div className="flex gap-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                 <Facebook size={20} />
                 <span className="sr-only">Facebook</span>
@@ -59,7 +59,7 @@ export default function Footer() {
             <h4 className="text-xl font-bold mb-4">{t.footer.contact}</h4>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <MapPin className="w-5 h-5 mr-2 mt-0.5 text-primary" />
+                <MapPin className="w-5 h-5 ltr:mr-2 rtl:ml-2 mt-0.5 text-primary" />
                 <span className="text-muted-foreground">
                   123 Seaside Boulevard<br />
                   Costa Bella, 12345<br />
@@ -67,11 +67,11 @@ export default function Footer() {
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-primary" />
+                <Phone className="w-5 h-5 ltr:mr-2 rtl:ml-2 text-primary" />
                 <span className="text-muted-foreground">+39 123 4567 890</span>
               </li>
               <li className="flex items-center">
-                <Mail className="w-5 h-5 mr-2 text-primary" />
+                <Mail className="w-5 h-5 ltr:mr-2 rtl:ml-2 text-primary" />
                 <span className="text-muted-foreground">info@maresereno.com</span>
               </li>
             </ul>
