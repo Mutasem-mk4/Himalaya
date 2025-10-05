@@ -1,11 +1,4 @@
 export const ar = {
-  common: {
-    error: "خطأ",
-    loading: "جاري التحميل...",
-    notFound: "غير موجود",
-    backToApartments: "العودة إلى الشاليهات",
-    sending: "جاري الإرسال..."
-  },
   nav: {
     home: "الرئيسية",
     apartments: "الشاليهات",
@@ -42,11 +35,7 @@ export const ar = {
     child: "طفل",
     selectDate: "اختر التاريخ",
     checkAvailability: "تحقق من التوفر",
-    bookingConfirmed: "تم تأكيد الحجز!",
-    guests: "الضيوف",
-    bedrooms: "غرف النوم",
-    bathrooms: "الحمامات",
-    submit: "إرسال الحجز"
+    bookingConfirmed: "تم تأكيد الحجز!"
   },
   testimonials: {
     title: "ماذا يقول ضيوفنا",
@@ -60,7 +49,6 @@ export const ar = {
   apartments: {
     title: "شاليهاتنا",
     subtitle: "اكتشف مجموعتنا من الشاليهات المميزة، من الأكواخ المريحة إلى الفلل الفاخرة.",
-    description: "الوصف",
     filters: {
       guests: "الضيوف",
       anyGuests: "أي عدد من الضيوف",
@@ -152,8 +140,7 @@ export const ar = {
       nights: "ليالي",
       cleaningFee: "رسوم التنظيف",
       serviceFee: "رسوم الخدمة",
-      total: "الإجمالي",
-      pricePerNight: "السعر لليلة الواحدة"
+      total: "الإجمالي"
     },
     confirmation: {
       title: "مراجعة تفاصيل الحجز",
@@ -202,12 +189,6 @@ export const ar = {
     thankYou: "شكراً لاتصالك بنا. سنرد على رسالتك في أقرب وقت ممكن.",
     faq: "الأسئلة الشائعة",
     faqSubtitle: "ابحث عن إجابات سريعة للأسئلة الأكثر شيوعاً حول شاليهاتنا وخدماتنا.",
-    form: {
-      name: "الاسم",
-      email: "البريد الإلكتروني",
-      phone: "الهاتف",
-      message: "الرسالة"
-    },
     questions: {
       checkInOut: {
         question: "ما هي أوقات تسجيل الوصول والمغادرة؟",

@@ -1,11 +1,4 @@
 export const en = {
-  common: {
-    error: "Error",
-    loading: "Loading...",
-    notFound: "Not Found",
-    backToApartments: "Back to Chalets",
-    sending: "Sending..."
-  },
   nav: {
     home: "Home",
     apartments: "Chalets",
@@ -42,11 +35,7 @@ export const en = {
     child: "Child",
     selectDate: "Select date",
     checkAvailability: "Check Availability",
-    bookingConfirmed: "Booking Confirmed!",
-    guests: "Guests",
-    bedrooms: "Bedrooms",
-    bathrooms: "Bathrooms",
-    submit: "Submit Booking"
+    bookingConfirmed: "Booking Confirmed!"
   },
   testimonials: {
     title: "What Our Guests Say",
@@ -117,7 +106,6 @@ export const en = {
   apartments: {
     title: "Our Apartments & Rooms",
     subtitle: "Discover our selection of premium accommodations, ranging from cozy studios to luxurious penthouses.",
-    description: "Description",
     filters: {
       guests: "Guests",
       anyGuests: "Any number of guests",
@@ -209,8 +197,7 @@ export const en = {
       nights: "nights",
       cleaningFee: "Cleaning fee",
       serviceFee: "Service fee",
-      total: "Total",
-      pricePerNight: "Price per night"
+      total: "Total"
     },
     confirmation: {
       title: "Review Booking Details",
@@ -259,12 +246,6 @@ export const en = {
     thankYou: "Thank you for reaching out. We'll respond to your message as soon as possible.",
     faq: "Frequently Asked Questions",
     faqSubtitle: "Find quick answers to commonly asked questions about our accommodations and services.",
-    form: {
-      name: "Name",
-      email: "Email",
-      phone: "Phone",
-      message: "Message"
-    },
     questions: {
       checkInOut: {
         question: "What are your check-in and check-out times?",
