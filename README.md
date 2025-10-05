@@ -1,12 +1,18 @@
-# Reva Chalets - Himalaya Chalet
+# Welcome to your Lovable project
 
 ## Project info
 
-Luxury apartment booking platform for Himalaya Chalet in Jordan.
+**URL**: https://lovable.dev/projects/96f629c9-6031-4f68-8bd0-680a3c64b6e3
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
+
+**Use Lovable**
+
+Simply visit the [Lovable Project](https://lovable.dev/projects/96f629c9-6031-4f68-8bd0-680a3c64b6e3) and start prompting.
+
+Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
@@ -56,7 +62,7 @@ This project is built with .
 
 ## How can I deploy this project?
 
-Deploy using your preferred hosting platform (Vercel, Netlify, etc.).
+Simply open [Lovable](https://lovable.dev/projects/96f629c9-6031-4f68-8bd0-680a3c64b6e3) and click on Share -> Publish.
 
 ## I want to use a custom domain - is that possible?
 
