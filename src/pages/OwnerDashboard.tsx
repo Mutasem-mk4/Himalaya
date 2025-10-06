@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { Mountain, Home, Calendar, Plus, Edit, MapPin, Users, Bed, Bath } from "lucide-react";
+import { Mountain, Home, Calendar, Plus, Edit, MapPin, Users, Bed, Bath, Upload, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -52,6 +52,7 @@ export default function OwnerDashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [showAddChalet, setShowAddChalet] = useState(false);
   const [editingChalet, setEditingChalet] = useState<Chalet | null>(null);
+  const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
   // Form state
@@ -215,6 +216,84 @@ export default function OwnerDashboard() {
         ? prev.amenities.filter(a => a !== amenity)
         : [...prev.amenities, amenity]
     }));
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user?.id}/${editingChalet?.id || 'new'}/${Date.now()}-${i}.${fileExt}`;
+
+        const { error: uploadError, data } = await supabase.storage
+          .from('chalet-images')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('chalet-images')
+          .getPublicUrl(fileName);
+
+        uploadedUrls.push(publicUrl);
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls]
+      }));
+
+      toast({
+        title: "Success",
+        description: `${uploadedUrls.length} image(s) uploaded successfully`,
+      });
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload images",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      event.target.value = '';
+    }
+  };
+
+  const removeImage = async (imageUrl: string) => {
+    try {
+      // Extract the file path from the URL
+      const urlParts = imageUrl.split('/chalet-images/');
+      if (urlParts.length > 1) {
+        const filePath = urlParts[1];
+        await supabase.storage
+          .from('chalet-images')
+          .remove([filePath]);
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter(img => img !== imageUrl)
+      }));
+
+      toast({
+        title: "Success",
+        description: "Image removed successfully",
+      });
+    } catch (error) {
+      console.error('Error removing image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove image",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading || loadingData) {
@@ -391,6 +470,53 @@ export default function OwnerDashboard() {
                     </div>
                   </div>
 
+                  <div>
+                    <Label>Images</Label>
+                    <div className="mt-2 space-y-4">
+                      {/* Image Upload Button */}
+                      <div>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          disabled={uploading}
+                          className="hidden"
+                          id="image-upload"
+                        />
+                        <Label
+                          htmlFor="image-upload"
+                          className="flex items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer hover:bg-accent/50 transition-colors"
+                        >
+                          <Upload className="h-5 w-5" />
+                          <span>{uploading ? 'Uploading...' : 'Upload Images'}</span>
+                        </Label>
+                      </div>
+
+                      {/* Image Preview Grid */}
+                      {formData.images.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2">
+                          {formData.images.map((imageUrl, index) => (
+                            <div key={index} className="relative group">
+                              <img
+                                src={imageUrl}
+                                alt={`Chalet image ${index + 1}`}
+                                className="w-full h-24 object-cover rounded-lg"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeImage(imageUrl)}
+                                className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="flex justify-end space-x-2">
                     <Button
                       type="button"
@@ -464,9 +590,17 @@ export default function OwnerDashboard() {
                 {chalets.map((chalet) => (
                   <Card key={chalet.id} className="overflow-hidden">
                     <CardContent className="p-0">
-                      <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
-                        <Mountain className="h-16 w-16 text-muted-foreground" />
-                      </div>
+                      {chalet.images && chalet.images.length > 0 ? (
+                        <img
+                          src={chalet.images[0]}
+                          alt={chalet.title}
+                          className="aspect-video w-full object-cover"
+                        />
+                      ) : (
+                        <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
+                          <Mountain className="h-16 w-16 text-muted-foreground" />
+                        </div>
+                      )}
                       <div className="p-4">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-semibold text-lg">{chalet.title}</h3>
