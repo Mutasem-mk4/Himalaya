@@ -73,6 +73,44 @@ export type Database = {
           },
         ]
       }
+      chalet_blocked_dates: {
+        Row: {
+          chalet_id: string
+          created_at: string
+          end_date: string
+          id: string
+          reason: string | null
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          chalet_id: string
+          created_at?: string
+          end_date: string
+          id?: string
+          reason?: string | null
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          chalet_id?: string
+          created_at?: string
+          end_date?: string
+          id?: string
+          reason?: string | null
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chalet_blocked_dates_chalet_id_fkey"
+            columns: ["chalet_id"]
+            isOneToOne: false
+            referencedRelation: "chalets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chalets: {
         Row: {
           address: string | null

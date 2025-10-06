@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { Mountain, Home, Calendar, Plus, Edit, MapPin, Users, Bed, Bath, Upload, X } from "lucide-react";
+import { Mountain, Home, Calendar, Plus, Edit, MapPin, Users, Bed, Bath, Upload, X, CalendarOff, Trash2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -45,6 +45,14 @@ interface Booking {
   special_requests: string;
 }
 
+interface BlockedDate {
+  id: string;
+  chalet_id: string;
+  start_date: string;
+  end_date: string;
+  reason: string | null;
+}
+
 export default function OwnerDashboard() {
   const { user, userRole, loading } = useAuth();
   const [chalets, setChalets] = useState<Chalet[]>([]);
@@ -53,6 +61,14 @@ export default function OwnerDashboard() {
   const [showAddChalet, setShowAddChalet] = useState(false);
   const [editingChalet, setEditingChalet] = useState<Chalet | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [blockedDates, setBlockedDates] = useState<Record<string, BlockedDate[]>>({});
+  const [showAvailability, setShowAvailability] = useState(false);
+  const [selectedChaletId, setSelectedChaletId] = useState<string | null>(null);
+  const [availabilityForm, setAvailabilityForm] = useState({
+    start_date: '',
+    end_date: '',
+    reason: ''
+  });
   const { toast } = useToast();
 
   // Form state
@@ -95,6 +111,7 @@ export default function OwnerDashboard() {
       // Fetch bookings for owner's chalets
       const chaletIds = chaletsData?.map(c => c.id) || [];
       let bookingsData = [];
+      let blockedDatesData: Record<string, BlockedDate[]> = {};
       
       if (chaletIds.length > 0) {
         const { data, error: bookingsError } = await supabase
@@ -105,10 +122,28 @@ export default function OwnerDashboard() {
 
         if (bookingsError) throw bookingsError;
         bookingsData = data || [];
+        
+        // Fetch blocked dates for all chalets
+        const { data: blockedData, error: blockedError } = await supabase
+          .from('chalet_blocked_dates')
+          .select('*')
+          .in('chalet_id', chaletIds)
+          .order('start_date', { ascending: true });
+
+        if (blockedError) throw blockedError;
+        
+        // Organize blocked dates by chalet_id
+        (blockedData || []).forEach((blocked) => {
+          if (!blockedDatesData[blocked.chalet_id]) {
+            blockedDatesData[blocked.chalet_id] = [];
+          }
+          blockedDatesData[blocked.chalet_id].push(blocked);
+        });
       }
 
       setChalets(chaletsData || []);
       setBookings(bookingsData);
+      setBlockedDates(blockedDatesData);
     } catch (error) {
       console.error('Error fetching owner data:', error);
       toast({
@@ -291,6 +326,71 @@ export default function OwnerDashboard() {
       toast({
         title: "Error",
         description: "Failed to remove image",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAddBlockedDate = async () => {
+    if (!selectedChaletId || !availabilityForm.start_date || !availabilityForm.end_date) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('chalet_blocked_dates')
+        .insert([{
+          chalet_id: selectedChaletId,
+          start_date: availabilityForm.start_date,
+          end_date: availabilityForm.end_date,
+          reason: availabilityForm.reason || null
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Blocked dates added successfully",
+      });
+
+      setAvailabilityForm({ start_date: '', end_date: '', reason: '' });
+      setShowAvailability(false);
+      fetchOwnerData();
+    } catch (error) {
+      console.error('Error adding blocked date:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add blocked dates",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteBlockedDate = async (blockedDateId: string) => {
+    try {
+      const { error } = await supabase
+        .from('chalet_blocked_dates')
+        .delete()
+        .eq('id', blockedDateId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Blocked date removed successfully",
+      });
+
+      fetchOwnerData();
+    } catch (error) {
+      console.error('Error deleting blocked date:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove blocked date",
         variant: "destructive",
       });
     }
@@ -535,6 +635,93 @@ export default function OwnerDashboard() {
                 </form>
               </DialogContent>
             </Dialog>
+
+            {/* Availability Management Dialog */}
+            <Dialog open={showAvailability} onOpenChange={setShowAvailability}>
+              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Manage Availability</DialogTitle>
+                  <DialogDescription>
+                    Block dates when your chalet is not available for booking
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-6">
+                  {/* Add New Blocked Date */}
+                  <div className="space-y-4">
+                    <h3 className="font-semibold">Block New Dates</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="start_date">Start Date</Label>
+                        <Input
+                          id="start_date"
+                          type="date"
+                          value={availabilityForm.start_date}
+                          onChange={(e) => setAvailabilityForm(prev => ({ ...prev, start_date: e.target.value }))}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="end_date">End Date</Label>
+                        <Input
+                          id="end_date"
+                          type="date"
+                          value={availabilityForm.end_date}
+                          onChange={(e) => setAvailabilityForm(prev => ({ ...prev, end_date: e.target.value }))}
+                          min={availabilityForm.start_date}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="reason">Reason (optional)</Label>
+                      <Input
+                        id="reason"
+                        placeholder="e.g., Personal use, Maintenance"
+                        value={availabilityForm.reason}
+                        onChange={(e) => setAvailabilityForm(prev => ({ ...prev, reason: e.target.value }))}
+                      />
+                    </div>
+                    <Button onClick={handleAddBlockedDate} className="w-full">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Blocked Period
+                    </Button>
+                  </div>
+
+                  {/* List of Existing Blocked Dates */}
+                  {selectedChaletId && blockedDates[selectedChaletId] && blockedDates[selectedChaletId].length > 0 && (
+                    <div className="space-y-4">
+                      <h3 className="font-semibold">Current Blocked Periods</h3>
+                      <div className="space-y-2">
+                        {blockedDates[selectedChaletId].map((blocked) => (
+                          <Card key={blocked.id}>
+                            <CardContent className="p-4 flex items-center justify-between">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Calendar className="h-4 w-4" />
+                                  <span className="font-medium">
+                                    {new Date(blocked.start_date).toLocaleDateString()} - {new Date(blocked.end_date).toLocaleDateString()}
+                                  </span>
+                                </div>
+                                {blocked.reason && (
+                                  <p className="text-sm text-muted-foreground">{blocked.reason}</p>
+                                )}
+                              </div>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => handleDeleteBlockedDate(blocked.id)}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           {/* Stats Cards */}
@@ -631,7 +818,7 @@ export default function OwnerDashboard() {
                             €{chalet.price_per_night}/night
                           </div>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-4 space-y-2">
                           <Button
                             size="sm"
                             variant="outline"
@@ -641,6 +828,25 @@ export default function OwnerDashboard() {
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setSelectedChaletId(chalet.id);
+                              setShowAvailability(true);
+                            }}
+                            className="w-full"
+                          >
+                            <CalendarOff className="h-4 w-4 mr-2" />
+                            Manage Availability
+                          </Button>
+                          
+                          {/* Show blocked dates count */}
+                          {blockedDates[chalet.id] && blockedDates[chalet.id].length > 0 && (
+                            <p className="text-xs text-muted-foreground text-center">
+                              {blockedDates[chalet.id].length} blocked period(s)
+                            </p>
+                          )}
                         </div>
                       </div>
                     </CardContent>
