@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
@@ -9,51 +9,50 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Wifi, Utensils, Waves, LifeBuoy, MapPin, Coffee } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-// Sample chalets data
-const featuredApartments: ApartmentProps[] = [
-  {
-    id: "1",
-    name: "Desert Vista Chalet",
-    description: "Luxurious chalet with panoramic desert views, modern amenities, and a private terrace.",
-    price: 120,
-    capacity: 2,
-    size: 45,
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-    location: "Wadi Rum",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Terrace"]
-  },
-  {
-    id: "2",
-    name: "Family Desert Lodge",
-    description: "Spacious chalet ideal for families, with full kitchen and stunning valley views.",
-    price: 180,
-    capacity: 4,
-    size: 75,
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-    location: "Dana Reserve",
-    features: ["Wi-Fi", "Kitchen", "Bathroom", "Air Conditioning", "TV", "Washing Machine"]
-  },
-  {
-    id: "3",
-    name: "Executive Desert Studio",
-    description: "Elegant studio with direct desert access, modern design, and premium finishes.",
-    price: 85,
-    capacity: 2,
-    size: 35,
-    image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73673?w=800&h=600&fit=crop",
-    location: "Eastern Desert",
-    features: ["Wi-Fi", "Kitchenette", "Bathroom", "Air Conditioning", "TV"]
-  }
-];
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Index() {
   const { t } = useLanguage();
+  const [featuredApartments, setFeaturedApartments] = useState<ApartmentProps[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
+    fetchFeaturedChalets();
   }, []);
+
+  const fetchFeaturedChalets = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('chalets')
+        .select('*')
+        .eq('status', 'active')
+        .eq('featured', true)
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (error) throw error;
+
+      const apartments: ApartmentProps[] = (data || []).map((chalet) => ({
+        id: chalet.id,
+        name: chalet.title,
+        description: chalet.description || '',
+        price: Number(chalet.price_per_night),
+        capacity: chalet.max_guests,
+        size: chalet.bedrooms * 25, // Approximate size based on bedrooms
+        image: chalet.images?.[0] || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop',
+        location: chalet.location,
+        features: chalet.amenities || []
+      }));
+
+      setFeaturedApartments(apartments);
+    } catch (error) {
+      console.error('Error fetching featured chalets:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   // Feature items
   const features = [
@@ -201,11 +200,21 @@ export default function Index() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredApartments.map((apartment, index) => (
-                <div key={apartment.id} className="animate-fade-in" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
-                  <ApartmentCard apartment={apartment} />
+              {loading ? (
+                <div className="col-span-full flex justify-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                 </div>
-              ))}
+              ) : featuredApartments.length > 0 ? (
+                featuredApartments.map((apartment, index) => (
+                  <div key={apartment.id} className="animate-fade-in" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
+                    <ApartmentCard apartment={apartment} />
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-muted-foreground">No featured chalets available at the moment.</p>
+                </div>
+              )}
             </div>
             
             <div className="text-center mt-12">
