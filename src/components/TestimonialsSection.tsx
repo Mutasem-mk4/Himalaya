@@ -128,7 +128,7 @@ export default function TestimonialsSection() {
             ))}
           </div>
           
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-center items-center gap-6 mt-8">
             <button
               onClick={prevTestimonial}
               className="p-2 rounded-full bg-card hover:bg-muted border border-border transition-colors"
