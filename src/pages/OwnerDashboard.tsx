@@ -244,6 +244,31 @@ export default function OwnerDashboard() {
     setShowAddChalet(true);
   };
 
+  const handleToggleFeatured = async (chaletId: string, currentFeatured: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('chalets')
+        .update({ featured: !currentFeatured })
+        .eq('id', chaletId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Chalet ${!currentFeatured ? 'marked as' : 'removed from'} featured`,
+      });
+
+      fetchOwnerData();
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update featured status",
+        variant: "destructive",
+      });
+    }
+  };
+
   const toggleAmenity = (amenity: string) => {
     setFormData(prev => ({
       ...prev,
@@ -791,9 +816,16 @@ export default function OwnerDashboard() {
                       <div className="p-4">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-semibold text-lg">{chalet.title}</h3>
-                          <Badge className={getStatusColor(chalet.status)}>
-                            {chalet.status}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className={getStatusColor(chalet.status)}>
+                              {chalet.status}
+                            </Badge>
+                            {chalet.featured && (
+                              <Badge variant="secondary" className="bg-primary/10 text-primary">
+                                Featured
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                         <div className="space-y-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -839,6 +871,14 @@ export default function OwnerDashboard() {
                           >
                             <CalendarOff className="h-4 w-4 mr-2" />
                             Manage Availability
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant={chalet.featured ? "default" : "outline"}
+                            onClick={() => handleToggleFeatured(chalet.id, chalet.featured)}
+                            className="w-full"
+                          >
+                            {chalet.featured ? "★ Featured" : "☆ Mark as Featured"}
                           </Button>
                           
                           {/* Show blocked dates count */}

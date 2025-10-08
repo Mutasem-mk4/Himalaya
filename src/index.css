@@ -85,6 +85,41 @@
     max-width: 100vw;
   }
   
+  /* Better Arabic text handling */
+  [dir="rtl"] {
+    text-align: right;
+  }
+  
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    font-weight: 600;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+  
+  /* Improve mobile text readability for Arabic */
+  @media (max-width: 768px) {
+    [dir="rtl"] h1 {
+      font-size: 1.75rem;
+      line-height: 1.3;
+    }
+    
+    [dir="rtl"] h2 {
+      font-size: 1.5rem;
+      line-height: 1.35;
+    }
+    
+    [dir="rtl"] p,
+    [dir="rtl"] span {
+      line-height: 1.7;
+      word-break: break-word;
+    }
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
   }
