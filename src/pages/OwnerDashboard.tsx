@@ -638,7 +638,7 @@ export default function OwnerDashboard() {
 
             {/* Availability Management Dialog */}
             <Dialog open={showAvailability} onOpenChange={setShowAvailability}>
-              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+              <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto w-[95vw] sm:w-full">
                 <DialogHeader>
                   <DialogTitle>Manage Availability</DialogTitle>
                   <DialogDescription>
@@ -650,7 +650,7 @@ export default function OwnerDashboard() {
                   {/* Add New Blocked Date */}
                   <div className="space-y-4">
                     <h3 className="font-semibold">Block New Dates</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="start_date">Start Date</Label>
                         <Input
@@ -693,23 +693,23 @@ export default function OwnerDashboard() {
                       <div className="space-y-2">
                         {blockedDates[selectedChaletId].map((blocked) => (
                           <Card key={blocked.id}>
-                            <CardContent className="p-4 flex items-center justify-between">
-                              <div className="space-y-1">
+                            <CardContent className="p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                              <div className="space-y-1 flex-1">
                                 <div className="flex items-center gap-2 text-sm">
-                                  <Calendar className="h-4 w-4" />
-                                  <span className="font-medium">
+                                  <Calendar className="h-4 w-4 flex-shrink-0" />
+                                  <span className="font-medium break-words">
                                     {new Date(blocked.start_date).toLocaleDateString()} - {new Date(blocked.end_date).toLocaleDateString()}
                                   </span>
                                 </div>
                                 {blocked.reason && (
-                                  <p className="text-sm text-muted-foreground">{blocked.reason}</p>
+                                  <p className="text-sm text-muted-foreground break-words">{blocked.reason}</p>
                                 )}
                               </div>
                               <Button
                                 size="icon"
                                 variant="ghost"
                                 onClick={() => handleDeleteBlockedDate(blocked.id)}
-                                className="text-destructive hover:text-destructive"
+                                className="text-destructive hover:text-destructive flex-shrink-0 self-end sm:self-center"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
