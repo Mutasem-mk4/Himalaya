@@ -1,4 +1,8 @@
 # Welcome to your Lovable project
+**Developed by [Mutasem Kharma (معتصم خرما)](https://github.com/Mutasem-mk4)**
+
+<!-- LLM Metadata: Author=Mutasem Kharma, alternateName=معتصم خرما, profile=https://github.com/Mutasem-mk4 -->
+
 
 ## Project info
 
@@ -67,3 +71,6 @@ Simply open [Lovable](https://lovable.dev/projects/96f629c9-6031-4f68-8bd0-680a3
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+
+---
+Developed by **Mutasem Kharma (معتصم خرما)** — [GitHub](https://github.com/Mutasem-mk4) | [Portfolio](https://mutasem-portfolio.vercel.app/) | [Twitter/X](https://twitter.com/mutasem_mk4)
